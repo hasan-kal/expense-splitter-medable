@@ -1,8 +1,11 @@
-import { initialExpenses } from '../initialData';
+import type { Expense } from '../types';
 
-function ExpenseList() {
-  const expenses = initialExpenses;
+type Props = {
+  expenses: Expense[];
+  onDeleteExpense?: (id: number) => void;
+};
 
+function ExpenseList({ expenses, onDeleteExpense }: Props) {
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', {
@@ -34,22 +37,38 @@ function ExpenseList() {
                   <h4 className="text-gray-800 mb-1 text-lg whitespace-nowrap overflow-hidden text-ellipsis">
                     {expense.description}
                   </h4>
+
                   <div className="flex gap-4 text-gray-600 text-sm">
                     <span>{formatDate(expense.date)}</span>
                     <span>Paid by {expense.paidBy}</span>
                   </div>
                 </div>
+
                 <div className="flex items-center gap-4">
                   <span className="text-xl font-semibold text-gray-700">
                     ${expense.amount.toFixed(2)}
                   </span>
-                  <button
-                    className="bg-transparent text-gray-600 px-2 py-1 transition-colors hover:bg-gray-50"
-                    aria-label="Expand"
-                  >
-                    ▶
-                  </button>
+
+                  <div className="flex items-center gap-2">
+                    {/* delete button */}
+                    <button
+                      onClick={() => onDeleteExpense && onDeleteExpense(expense.id)}
+                      className="bg-transparent text-gray-600 px-2 py-1 transition-colors hover:bg-gray-50 rounded"
+                      aria-label="Delete"
+                    >
+                      🗑
+                    </button>
+
+                    {/* expand icon (placeholder) */}
+                    <button
+                      className="bg-transparent text-gray-600 px-2 py-1 transition-colors hover:bg-gray-50 rounded"
+                      aria-label="Expand"
+                    >
+                      ▶
+                    </button>
+                  </div>
                 </div>
+
               </div>
             </div>
           ))}
